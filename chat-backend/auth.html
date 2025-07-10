@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>ورود / ثبت‌نام</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f4f4f4;
+      padding: 40px;
+      text-align: center;
+    }
+    input, button {
+      padding: 10px;
+      margin: 10px;
+      width: 80%;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background: #10a37f;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0d8667;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>ورود یا ثبت‌نام</h2>
+  <input type="email" id="email" placeholder="ایمیل" />
+  <input type="password" id="password" placeholder="رمز عبور" />
+  <br>
+  <button onclick="auth('login')">ورود</button>
+  <button onclick="auth('signup')">ثبت‌نام</button>
+
+  <script>
+    const API_BASE = "https://your-vercel-project.vercel.app/api"; // ← آدرس واقعی سرور
+
+    async function auth(mode) {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      if (!email || !password) return alert("لطفا ایمیل و رمز عبور را وارد کنید");
+
+      try {
+        const res = await fetch(`${API_BASE}/${mode}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) return alert("❌ " + (data.error || "خطا در ورود یا ثبت‌نام"));
+
+        if (mode === "signup") {
+          alert("✅ ثبت‌نام موفق! لطفاً ایمیل را تایید کنید.");
+        } else {
+          alert("✅ ورود موفق!");
+        }
+
+        // انتقال به صفحه‌ی اصلی
+        window.location.href = "rav.html";
+
+      } catch (err) {
+        alert("خطا در ارتباط با سرور");
+        console.error(err);
+      }
+    }
+  </script>
+</body>
+</html>
